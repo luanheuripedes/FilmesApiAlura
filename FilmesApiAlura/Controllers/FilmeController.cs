@@ -15,7 +15,6 @@ namespace FilmesApiAlura.Controllers
         public void AdicionaFilme([FromBody] Filme filme)
         {
             filmes.Add(filme);
-            System.Console.WriteLine(filme.Titulo);
         }
     }
 }
