@@ -1,4 +1,5 @@
-﻿using FilmesApiAlura.Data;
+﻿using AutoMapper;
+using FilmesApiAlura.Data;
 using FilmesApiAlura.Data.Dtos;
 using FilmesApiAlura.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -13,22 +14,19 @@ namespace FilmesApiAlura.Controllers
     public class FilmeController:ControllerBase
     {
         private readonly ApiAluraContext _contex;
+        private readonly IMapper _mapper;
 
-        public FilmeController(ApiAluraContext contex)
+
+        public FilmeController(ApiAluraContext contex, IMapper mapper)
         {
             _contex = contex;
+            _mapper = mapper;
         }
 
         [HttpPost]
         public IActionResult AdicionaFilme([FromBody] CreateFilmeDto filmeDto)
         {
-            Filme filme = new Filme
-            {
-                Titulo = filmeDto.Titulo,
-                Genero = filmeDto.Genero,
-                Duracao = filmeDto.Duracao,
-                Diretor = filmeDto.Diretor
-            };
+            Filme filme = _mapper.Map<Filme>(filmeDto);
 
             _contex.Filmes.Add(filme);
             _contex.SaveChanges();
@@ -50,15 +48,7 @@ namespace FilmesApiAlura.Controllers
 
             if(filme != null)
             {
-                ReadFilmeDto filmeDto = new ReadFilmeDto
-                {
-                    Titulo = filme.Titulo,
-                    Diretor = filme.Diretor,
-                    Duracao = filme.Duracao,
-                    Id = filme.Id,
-                    Genero = filme.Genero,
-                    HoraDaConsulta = DateTime.Now
-                };
+                ReadFilmeDto filmeDto = _mapper.Map<ReadFilmeDto>(filme);
 
                 Ok(filmeDto);
             }
@@ -76,10 +66,7 @@ namespace FilmesApiAlura.Controllers
                 return NotFound();
             }
 
-            filme.Titulo = filmeDto.Titulo;
-            filme.Genero = filmeDto.Genero;
-            filme.Duracao = filmeDto.Duracao;
-            filme.Diretor = filmeDto.Diretor;
+            _mapper.Map(filmeDto, filme);
 
             _contex.SaveChanges();
 
