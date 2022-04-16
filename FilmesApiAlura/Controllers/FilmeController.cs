@@ -44,7 +44,41 @@ namespace FilmesApiAlura.Controllers
             }
             return NotFound();
 
-            
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult AtualizarFilme(int id, [FromBody] Filme filmeNovo)
+        {
+            Filme filme = _contex.Filmes.FirstOrDefault(x => x.Id == id);
+
+            if(filme == null)
+            {
+                return NotFound();
+            }
+
+            filme.Titulo = filmeNovo.Titulo;
+            filme.Genero = filmeNovo.Genero;
+            filme.Duracao = filmeNovo.Duracao;
+            filme.Diretor = filmeNovo.Diretor;
+
+            _contex.SaveChanges();
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeletaFilme(int id)
+        {
+            Filme filme = _contex.Filmes.FirstOrDefault(x => x.Id == id);
+
+            if (filme == null)
+            {
+                return NotFound();
+            }
+
+            _contex.Remove(filme);
+            _contex.SaveChanges();
+            return NoContent();
         }
 
 
