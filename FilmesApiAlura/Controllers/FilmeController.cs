@@ -14,32 +14,33 @@ namespace FilmesApiAlura.Controllers
 
         
         [HttpPost]
-        public void AdicionaFilme([FromBody] Filme filme)
+        public IActionResult AdicionaFilme([FromBody] Filme filme)
         {
             filme.Id = id++;
             filmes.Add(filme);
+
+            return CreatedAtAction(nameof(RecuperaFilmesPorId), new { Id = filme.Id}, filme);
         }
 
         [HttpGet]
-        public IEnumerable<Filme> RecuperaFilmes()
+        public IActionResult RecuperaFilmes()
         {
-            return filmes;
+            return Ok(filmes);
         }
 
         [HttpGet("{id}")]
-        public Filme RecuperaFilmesPorId(int id)
+        public IActionResult RecuperaFilmesPorId(int id)
         {
-            /*
-            foreach(Filme filme in filmes){
-                if(filme.Id == id)
-                {
-                    return filme;
-                }
+            Filme filme = filmes.FirstOrDefault(filme => filme.Id == id);
+
+            if(filme != null)
+            {
+                Ok(filme);
             }
-            */
 
-            return filmes.FirstOrDefault(filme => filme.Id == id);
-
+            return NotFound();
         }
+
+
     }
 }
