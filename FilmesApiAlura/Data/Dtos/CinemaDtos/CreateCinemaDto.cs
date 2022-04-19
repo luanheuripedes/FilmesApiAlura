@@ -2,13 +2,11 @@
 
 namespace FilmesApiAlura.Data.Dtos.Cinema
 {
-    public class ReadCinemaDto
+    public class CreateCinemaDto
     {
-        [Key]
-        [Required]
-        public int Id { get; set; }
         [Required(ErrorMessage = "O campo de nome é obrigatório")]
         public string Nome { get; set; }
-        public object Endereco { get; set; }
+        public int EnderecoId { get; set; }
+        //public int GerenteFK { get; set; }
     }
 }

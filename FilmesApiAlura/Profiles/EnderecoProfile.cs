@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using FilmesApiAlura.Data.Dtos.Endereco;
+using FilmesApiAlura.Data.Dtos.EnderecosDtos;
 using FilmesApiAlura.Models;
 
 namespace FilmesApiAlura.Profiles

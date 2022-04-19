@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FilmesApiAlura.Data.Dtos.Endereco
+namespace FilmesApiAlura.Data.Dtos.EnderecosDtos
 {
     public class UpdateEnderecoDto
     {
