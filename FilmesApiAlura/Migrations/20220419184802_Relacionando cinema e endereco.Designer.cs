@@ -2,14 +2,16 @@
 using FilmesApiAlura.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FilmesApiAlura.Migrations
 {
     [DbContext(typeof(ApiAluraContext))]
-    partial class ApiAluraContextModelSnapshot : ModelSnapshot
+    [Migration("20220419184802_Relacionando cinema e endereco")]
+    partial class Relacionandocinemaeendereco
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

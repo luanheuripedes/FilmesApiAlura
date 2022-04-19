@@ -16,7 +16,13 @@ namespace FilmesApiAlura.Data
 
         public ApiAluraContext(DbContextOptions<ApiAluraContext> options):base(options) { }
        
-
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Endereco>()
+                .HasOne(endereco => endereco.Cinema)
+                .WithOne(cinema => cinema.Endereco)
+                .HasForeignKey<Cinema>(cinema => cinema.EnderecoId);
+        }
         
     }
 }
