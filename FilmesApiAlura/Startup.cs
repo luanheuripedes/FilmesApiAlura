@@ -1,18 +1,12 @@
 using FilmesApiAlura.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FilmesApiAlura
 {
@@ -29,7 +23,7 @@ namespace FilmesApiAlura
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddDbContext<ApiAluraContext>(opts => opts.UseMySql(Configuration.GetConnectionString("ApiAlura"),
+            services.AddDbContext<ApiAluraContext>(opts => opts.UseLazyLoadingProxies().UseMySql(Configuration.GetConnectionString("ApiAlura"),
                                                              new MySqlServerVersion(new Version(10, 4, 17))));
 
 
