@@ -23,6 +23,11 @@ namespace FilmesApiAlura.Data
                 .HasOne(endereco => endereco.Cinema)
                 .WithOne(cinema => cinema.Endereco)
                 .HasForeignKey<Cinema>(cinema => cinema.EnderecoId);
+
+            builder.Entity<Cinema>()
+                .HasOne(cinema => cinema.Gerente)
+                .WithMany(gerente => gerente.Cinemas)
+                .HasForeignKey(cinema => cinema.GerenteId);
         }
         
     }
