@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using FilmesApiAlura.Data;
-using FilmesApiAlura.Data.Dtos.Gerente;
+using FilmesApiAlura.Data.Dtos.GerenteDtos;
 using FilmesApiAlura.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -29,7 +29,7 @@ namespace FilmesApiAlura.Controllers
             return CreatedAtAction(nameof(RecuperaGerentePorId), new { Id = gerente.Id}, gerente);
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public IActionResult RecuperaGerentePorId(int id)
         {
             var gerente = _context.Gerentes.FirstOrDefault(gerente => gerente.Id == id);

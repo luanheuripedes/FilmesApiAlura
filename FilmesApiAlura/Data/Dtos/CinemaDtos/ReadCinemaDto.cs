@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using FilmesApiAlura.Models;
 
-namespace FilmesApiAlura.Data.Dtos.Cinema
+namespace FilmesApiAlura.Data.Dtos.CinemaDtos
 {
     public class ReadCinemaDto
     {
@@ -13,5 +13,6 @@ namespace FilmesApiAlura.Data.Dtos.Cinema
         public string Nome { get; set; }
 
         public Endereco Endereco { get; set; }
+        public Gerente Gerente { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace FilmesApiAlura.Models
 {
@@ -12,9 +14,15 @@ namespace FilmesApiAlura.Models
         public string Nome { get; set; }
 
         public int EnderecoId { get; set; }
+
+
         public int GerenteId { get; set; }
 
         public virtual Endereco Endereco { get; set; }
+
+
         public virtual Gerente Gerente { get; set; }
+
+        public virtual List<Filme> Filmes { get; set; }
     }
 }

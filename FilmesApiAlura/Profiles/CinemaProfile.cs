@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using FilmesApiAlura.Data.Dtos.Cinema;
+using FilmesApiAlura.Data.Dtos.CinemaDtos;
 using FilmesApiAlura.Models;
 
 namespace FilmesApiAlura.Profiles

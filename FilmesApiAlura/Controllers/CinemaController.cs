@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using FilmesApiAlura.Data;
-using FilmesApiAlura.Data.Dtos.Cinema;
+using FilmesApiAlura.Data.Dtos.CinemaDtos;
 using FilmesApiAlura.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
