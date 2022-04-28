@@ -23,6 +23,7 @@ namespace FilmesApiAlura.Models
 
         public virtual Gerente Gerente { get; set; }
 
-        public virtual List<Filme> Filmes { get; set; }
+        [JsonIgnore]
+        public virtual List<Sessao> Sessoes { get; set; }
     }
 }
