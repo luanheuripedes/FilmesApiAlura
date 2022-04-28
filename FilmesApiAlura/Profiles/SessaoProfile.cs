@@ -9,7 +9,11 @@ namespace FilmesApiAlura.Profiles
         public SessaoProfile()
         {
             CreateMap<CreateSessaoDTO, Sessao>().ReverseMap();
-            CreateMap<ReadSessaoDto, Sessao>().ReverseMap();
+
+            CreateMap<Sessao, ReadSessaoDto>()
+                .ForMember(dto => dto.HorarioDeInicio, opts => opts
+                .MapFrom(dto =>
+                dto.HorarioDeEncerramento.AddMinutes(dto.Filme.Duracao * (-1))));
         }
     }
 }

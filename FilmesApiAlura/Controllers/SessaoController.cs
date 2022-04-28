@@ -9,7 +9,7 @@ namespace FilmesApiAlura.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class SessaoController:ControllerBase
+    public class SessaoController : ControllerBase
     {
         private readonly ApiAluraContext _context;
         private readonly IMapper _mapper;
@@ -29,19 +29,20 @@ namespace FilmesApiAlura.Controllers
             return CreatedAtAction(nameof(RecuperaSessoesPorId), new { Id = sessao.Id }, sessao);
         }
 
-        [HttpGet]
+        [HttpGet("id")]
         public IActionResult RecuperaSessoesPorId(int id)
         {
             var sessao = _context.Sessoes.FirstOrDefault(sessao => sessao.Id == id);
 
-            if(sessao != null)
+            if(sessao == null)
             {
-                var sessaoDto = _mapper.Map<ReadSessaoDto>(sessao);
-
-                return Ok(sessaoDto);
+                return NotFound();
             }
 
-            return NotFound();
+            var sessaoDto = _mapper.Map<ReadSessaoDto>(sessao);
+
+            return Ok(sessaoDto);
+
         }
     }
 }
