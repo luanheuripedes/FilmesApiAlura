@@ -31,9 +31,28 @@ namespace FilmesApiAlura.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Cinema> RecuperaCinema([FromQuery] string nomeDoFilme)
+        public IActionResult RecuperaCinema([FromQuery] string? nomeDoFilme)
         {
-            return _context.Cinemas;
+            List<Cinema> cinemas = _context.Cinemas.ToList();
+
+            if(cinemas == null)
+            {
+                return NotFound();
+            }
+
+            if (!string.IsNullOrEmpty(nomeDoFilme))
+            {
+                //Lembra a consulta sql convecional
+                IEnumerable<Cinema> query = from c in cinemas
+                            where c.Sessoes.Any(sessao => sessao.Filme.Titulo == nomeDoFilme)
+                            select c;
+
+                cinemas = query.ToList();
+            }
+
+            var readDto = _mapper.Map<List<ReadCinemaDto>>(cinemas);
+
+            return Ok(readDto);
         }
 
         [HttpGet("{id}")]
