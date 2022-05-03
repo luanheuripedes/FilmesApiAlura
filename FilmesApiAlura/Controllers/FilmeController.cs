@@ -36,11 +36,32 @@ namespace FilmesApiAlura.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Filme> RecuperaFilmes()
+        public IActionResult RecuperaFilmes([FromQuery] int? classificacaoEtaria)
+        {
+
+            List<Filme> filmes = new List<Filme>();
+
+            if(classificacaoEtaria == null)
+            {
+                filmes = _contex.Filmes.ToList();
+            }
+
+            if(filmes != null)
+            {
+                var filmesDto = _mapper.Map<List<ReadFilmeDto>>(filmes);
+                
+                return Ok(filmesDto);
+            }
+            return NotFound();
+        }
+
+        /*
+        [HttpGet]
+        public IEnumerable<Filme> RecuperaFilmesTodosOsFilmes()
         {
             return _contex.Filmes;
         }
-
+        */
         [HttpGet("{id}")]
         public IActionResult RecuperaFilmesPorId(int id)
         {

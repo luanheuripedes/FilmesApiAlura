@@ -9,7 +9,9 @@ namespace FilmesApiAlura.Profiles
         public FilmeProfile()
         {
             CreateMap<CreateFilmeDto, Filme>();
-            CreateMap<Filme, ReadFilmeDto>();
+
+            CreateMap<Filme, ReadFilmeDto>().ReverseMap();
+
             CreateMap<UpdateFilmeDto, Filme>();
         }
     }
