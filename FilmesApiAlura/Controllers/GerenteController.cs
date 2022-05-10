@@ -15,6 +15,7 @@ namespace FilmesApiAlura.Controllers
         private readonly IMapper _mapper;
         private readonly ApiAluraContext _context;
 
+        //Injeção de dependencia
         public GerenteController(IMapper mapper, ApiAluraContext context)
         {
             _mapper = mapper;
