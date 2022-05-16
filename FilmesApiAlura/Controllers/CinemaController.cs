@@ -54,9 +54,9 @@ namespace FilmesApiAlura.Controllers
         public IActionResult AtualizaCinema(int id, [FromBody] UpdateCinemaDto cinemaDto)
         {
 
-            var updateDto = _cinemaService.AtualizaCinema(id, cinemaDto);
+            var resultado = _cinemaService.AtualizaCinema(id, cinemaDto);
 
-            if(updateDto == null)
+            if(resultado.IsFailed)
             {
                 return NotFound();
             }
@@ -67,9 +67,9 @@ namespace FilmesApiAlura.Controllers
         public IActionResult DeletaCinema(int id)
         {
 
-            var deletaDto = _cinemaService.DeletaCinema(id);
+            var resultado = _cinemaService.DeletaCinema(id);
 
-            if (deletaDto == false)
+            if (resultado.IsFailed)
             {
                 return NotFound();
             }

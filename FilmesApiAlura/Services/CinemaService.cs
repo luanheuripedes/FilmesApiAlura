@@ -2,6 +2,7 @@
 using FilmesApiAlura.Data;
 using FilmesApiAlura.Data.Dtos.CinemaDtos;
 using FilmesApiAlura.Models;
+using FluentResults;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,35 +66,33 @@ namespace FilmesApiAlura.Services
             return null;
         }
 
-        public bool DeletaCinema(int id)
+        public Result DeletaCinema(int id)
         {
             var cinema = _context.Cinemas.FirstOrDefault(cinema => cinema.Id == id);
             if (cinema == null)
             {
-                return false;
+                return Result.Fail("Cinema não encontrado!");
             }
             _context.Remove(cinema);
             _context.SaveChanges();
 
-
-
-            return true;
+            return Result.Ok();
         }
 
-        public UpdateCinemaDto AtualizaCinema(int id, UpdateCinemaDto cinemaDto)
+        public Result AtualizaCinema(int id, UpdateCinemaDto cinemaDto)
         {
             Cinema cinema = _context.Cinemas.FirstOrDefault(cinema => cinema.Id == id);
 
             if (cinema == null)
             {
-                return null;
+                return Result.Fail("Cinema não encontrado");
             }
 
-            var updateDto = _mapper.Map(cinema, cinemaDto);
+            _mapper.Map(cinema, cinemaDto);
             _context.SaveChanges();
 
 
-            return updateDto;
+            return Result.Ok();
         }
     }
 }

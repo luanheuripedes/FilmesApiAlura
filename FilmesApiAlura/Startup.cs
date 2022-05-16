@@ -1,4 +1,5 @@
 using FilmesApiAlura.Data;
+using FilmesApiAlura.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,8 @@ namespace FilmesApiAlura
 
             services.AddDbContext<ApiAluraContext>(opts => opts.UseLazyLoadingProxies().UseMySql(Configuration.GetConnectionString("ApiAlura"),
                                                              new MySqlServerVersion(new Version(10, 4, 17))));
-
+            services.AddScoped<FilmeService, FilmeService>();
+            services.AddScoped<CinemaService, CinemaService>();
 
 
             services.AddControllers();

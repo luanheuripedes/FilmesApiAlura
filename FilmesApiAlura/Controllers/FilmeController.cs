@@ -70,9 +70,9 @@ namespace FilmesApiAlura.Controllers
         [HttpPut("{id}")]
         public IActionResult AtualizarFilme(int id, [FromBody] UpdateFilmeDto filmeDto)
         {
-            var readdto = _filmeService.AtualizaFilme(id, filmeDto);
+            var resultado = _filmeService.AtualizaFilme(id, filmeDto);
 
-            if (readdto == null)
+            if (resultado.IsFailed)
             {
                 return NotFound();
             }
@@ -84,8 +84,11 @@ namespace FilmesApiAlura.Controllers
         public IActionResult DeletaFilme(int id)
         {
 
-            _filmeService.DeletaFilme(id);
-
+            var result = _filmeService.DeletaFilme(id);
+            if (result.IsFailed)
+            {
+                return NotFound();
+            }
 
             return NoContent();
         }
