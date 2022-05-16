@@ -2,6 +2,7 @@
 using FilmesApiAlura.Data;
 using FilmesApiAlura.Data.Dtos.CinemaDtos;
 using FilmesApiAlura.Models;
+using FilmesApiAlura.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,58 +13,38 @@ namespace FilmesApiAlura.Controllers
     [Route("[controller]")]
     public class CinemaController : ControllerBase
     {
-        private readonly ApiAluraContext _context;
-        private readonly IMapper _mapper;
 
-        public CinemaController(ApiAluraContext context, IMapper mapper)
+        private readonly CinemaService _cinemaService;
+
+        public CinemaController(CinemaService cinemaService)
         {
-            _context = context;
-            _mapper = mapper;
+            _cinemaService = cinemaService;
         }
 
         [HttpPost]
         public IActionResult AdicionarCinema([FromBody] CreateCinemaDto cinemaDto)
         {
-            Cinema cinema =  _mapper.Map<Cinema>(cinemaDto);
-            _context.Cinemas.Add(cinema);
-            _context.SaveChanges();
-            return CreatedAtAction(nameof(RecuperaCinemasPorId), new { Id = cinema.Id }, cinema);
+
+            var readCinemaDto = _cinemaService.AdicionarCinema(cinemaDto);
+
+            return CreatedAtAction(nameof(RecuperaCinemasPorId), new { Id = readCinemaDto.Id }, readCinemaDto);
         }
 
         [HttpGet]
-        public IActionResult RecuperaCinema([FromQuery] string? nomeDoFilme)
+        public IActionResult RecuperaCinema([FromQuery] string nomeDoFilme)
         {
-            List<Cinema> cinemas = _context.Cinemas.ToList();
-
-            if(cinemas == null)
-            {
-                return NotFound();
-            }
-
-            if (!string.IsNullOrEmpty(nomeDoFilme))
-            {
-                //Lembra a consulta sql convecional
-                IEnumerable<Cinema> query = from c in cinemas
-                            where c.Sessoes.Any(sessao => sessao.Filme.Titulo == nomeDoFilme)
-                            select c;
-
-                cinemas = query.ToList();
-            }
-
-            var readDto = _mapper.Map<List<ReadCinemaDto>>(cinemas);
-
+            var readDto = _cinemaService.RecuperaCinema(nomeDoFilme);
             return Ok(readDto);
         }
 
         [HttpGet("{id}")]
         public IActionResult RecuperaCinemasPorId(int id)
         {
-            Cinema cinema = _context.Cinemas.FirstOrDefault(cinema => cinema.Id == id);
+            var readDto = _cinemaService.RecuperaCinemaId(id);
 
-            if(cinema != null)
+            if(readDto != null)
             {
-                ReadCinemaDto cinemaDto = _mapper.Map<ReadCinemaDto>(cinema);
-                return Ok(cinemaDto);
+                return Ok(readDto);
             }
 
             return NotFound();
@@ -72,28 +53,27 @@ namespace FilmesApiAlura.Controllers
         [HttpPut("{id}")]
         public IActionResult AtualizaCinema(int id, [FromBody] UpdateCinemaDto cinemaDto)
         {
-            Cinema cinema = _context.Cinemas.FirstOrDefault(cinema => cinema.Id == id);
 
-            if(cinema == null)
+            var updateDto = _cinemaService.AtualizaCinema(id, cinemaDto);
+
+            if(updateDto == null)
             {
                 return NotFound();
             }
-
-            _mapper.Map(cinemaDto, cinema);
-            _context.SaveChanges();
            return NoContent();
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeletaCinema(int id)
         {
-            Cinema cinema = _context.Cinemas.FirstOrDefault(cinema => cinema.Id == id);
-            if (cinema == null)
+
+            var deletaDto = _cinemaService.DeletaCinema(id);
+
+            if (deletaDto == false)
             {
                 return NotFound();
             }
-            _context.Remove(cinema);
-            _context.SaveChanges();
+
             return NoContent();
         }
     }

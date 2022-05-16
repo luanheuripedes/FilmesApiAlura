@@ -2,6 +2,7 @@
 using FilmesApiAlura.Data;
 using FilmesApiAlura.Data.Dtos;
 using FilmesApiAlura.Models;
+using FilmesApiAlura.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,45 +14,33 @@ namespace FilmesApiAlura.Controllers
     [Route("[controller]")]
     public class FilmeController:ControllerBase
     {
-        private readonly ApiAluraContext _contex;
-        private readonly IMapper _mapper;
+        private readonly FilmeService _filmeService;
 
-
-        public FilmeController(ApiAluraContext contex, IMapper mapper)
+        public FilmeController(FilmeService filmeService)
         {
-            _contex = contex;
-            _mapper = mapper;
+            _filmeService = filmeService;
         }
 
         [HttpPost]
         public IActionResult AdicionaFilme([FromBody] CreateFilmeDto filmeDto)
         {
-            Filme filme = _mapper.Map<Filme>(filmeDto);
+            var readDto = _filmeService.AdicionaService(filmeDto);
+            
 
-            _contex.Filmes.Add(filme);
-            _contex.SaveChanges();
-
-            return CreatedAtAction(nameof(RecuperaFilmesPorId), new { Id = filme.Id}, filme);
+            return CreatedAtAction(nameof(RecuperaFilmesPorId), new { Id = readDto.Id}, readDto);
             
         }
 
         [HttpGet]
-        public IActionResult RecuperaFilmes([FromQuery] int? classificacaoEtaria)
+        public IActionResult RecuperaFilmes([FromQuery] int? classificacaoEtaria = null)
         {
+            var readdto = _filmeService.RecuperaFilmes(classificacaoEtaria);
 
-            List<Filme> filmes = new List<Filme>();
-
-            if(classificacaoEtaria == null)
+            if(readdto != null)
             {
-                filmes = _contex.Filmes.ToList();
+                return Ok();
             }
 
-            if(filmes != null)
-            {
-                var filmesDto = _mapper.Map<List<ReadFilmeDto>>(filmes);
-                
-                return Ok(filmesDto);
-            }
             return NotFound();
         }
 
@@ -65,31 +54,28 @@ namespace FilmesApiAlura.Controllers
         [HttpGet("{id}")]
         public IActionResult RecuperaFilmesPorId(int id)
         {
-            Filme filme = _contex.Filmes.FirstOrDefault(filme => filme.Id == id);
 
-            if(filme != null)
+            var readdto = _filmeService.RecuperaFilmesPorId(id);
+
+            if (readdto != null)
             {
-                ReadFilmeDto filmeDto = _mapper.Map<ReadFilmeDto>(filme);
-
-                Ok(filmeDto);
+                return Ok();
             }
+
             return NotFound();
+
 
         }
 
         [HttpPut("{id}")]
         public IActionResult AtualizarFilme(int id, [FromBody] UpdateFilmeDto filmeDto)
         {
-            Filme filme = _contex.Filmes.FirstOrDefault(x => x.Id == id);
+            var readdto = _filmeService.AtualizaFilme(id, filmeDto);
 
-            if(filme == null)
+            if (readdto == null)
             {
                 return NotFound();
             }
-
-            _mapper.Map(filmeDto, filme);
-
-            _contex.SaveChanges();
 
             return NoContent();
         }
@@ -97,15 +83,10 @@ namespace FilmesApiAlura.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeletaFilme(int id)
         {
-            Filme filme = _contex.Filmes.FirstOrDefault(x => x.Id == id);
 
-            if (filme == null)
-            {
-                return NotFound();
-            }
+            _filmeService.DeletaFilme(id);
 
-            _contex.Remove(filme);
-            _contex.SaveChanges();
+
             return NoContent();
         }
 
