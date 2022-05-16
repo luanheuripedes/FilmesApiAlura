@@ -28,6 +28,8 @@ namespace FilmesApiAlura
                                                              new MySqlServerVersion(new Version(10, 4, 17))));
             services.AddScoped<FilmeService, FilmeService>();
             services.AddScoped<CinemaService, CinemaService>();
+            services.AddScoped<EnderecoService, EnderecoService>();
+            services.AddScoped<SessaoService, SessaoService>();
 
 
             services.AddControllers();
