@@ -38,7 +38,7 @@ namespace FilmesApiAlura.Controllers
 
             if(readdto != null)
             {
-                return Ok();
+                return Ok(readdto);
             }
 
             return NotFound();
