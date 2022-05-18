@@ -1,15 +1,22 @@
-using FilmesApiAlura.Data;
-using FilmesApiAlura.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
+using UsuariosApi.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
-namespace FilmesApiAlura
+namespace UsuariosApi
 {
     public class Startup
     {
@@ -23,22 +30,17 @@ namespace FilmesApiAlura
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddDbContext<ApiAluraContext>(opts => opts.UseLazyLoadingProxies().UseMySql(Configuration.GetConnectionString("ApiAlura"),
+            services.AddDbContext<UserDbContext>(opts => opts.UseLazyLoadingProxies().UseMySql(Configuration.GetConnectionString("UsuarioConnection"),
                                                              new MySqlServerVersion(new Version(10, 4, 17))));
-            services.AddScoped<FilmeService, FilmeService>();
-            services.AddScoped<CinemaService, CinemaService>();
-            services.AddScoped<EnderecoService, EnderecoService>();
-            services.AddScoped<SessaoService, SessaoService>();
-            services.AddScoped<GerenteService, GerenteService>();
+
+            //Identity
+            services.AddIdentity<IdentityUser<int>, IdentityRole<int>>()
+                    .AddEntityFrameworkStores<UserDbContext>();
 
 
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "FilmesApiAlura", Version = "v1" });
-            });
 
+            //AutoMapper
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
@@ -49,7 +51,7 @@ namespace FilmesApiAlura
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FilmesApiAlura v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "UsuariosApi v1"));
             }
 
             app.UseHttpsRedirection();
