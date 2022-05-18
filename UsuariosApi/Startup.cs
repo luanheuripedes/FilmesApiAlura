@@ -38,15 +38,20 @@ namespace UsuariosApi
             services.AddIdentity<IdentityUser<int>, IdentityRole<int>>()
                     .AddEntityFrameworkStores<UserDbContext>();
 
+            /*
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredLength = 8;
             });
+            */
 
             //Injeção da service
             services.AddScoped<CadastroService, CadastroService>();
+
+            //Login
+            services.AddScoped<LoginService, LoginService>();
 
 
             services.AddControllers();
