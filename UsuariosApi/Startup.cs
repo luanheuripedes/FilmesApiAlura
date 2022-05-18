@@ -15,6 +15,7 @@ using AutoMapper;
 using UsuariosApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using UsuariosApi.Services;
 
 namespace UsuariosApi
 {
@@ -37,11 +38,20 @@ namespace UsuariosApi
             services.AddIdentity<IdentityUser<int>, IdentityRole<int>>()
                     .AddEntityFrameworkStores<UserDbContext>();
 
+            //Injeção da service
+            services.AddScoped<CadastroService, CadastroService>();
+
 
             services.AddControllers();
 
             //AutoMapper
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "UsuariosApi", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
