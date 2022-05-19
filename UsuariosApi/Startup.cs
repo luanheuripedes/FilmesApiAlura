@@ -35,7 +35,9 @@ namespace UsuariosApi
                                                              new MySqlServerVersion(new Version(10, 4, 17))));
 
             //Identity
-            services.AddIdentity<IdentityUser<int>, IdentityRole<int>>()
+            services.AddIdentity<IdentityUser<int>, IdentityRole<int>>(
+                    opts => opts.SignIn.RequireConfirmedEmail = true
+                )
                     .AddEntityFrameworkStores<UserDbContext>();
 
             /*
