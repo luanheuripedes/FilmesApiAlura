@@ -12,6 +12,8 @@ namespace UsuariosApi.Services
     {
         public Token CreateToken(IdentityUser<int> usuario)
         {
+            //Criado o array de clains
+
             Claim[] direitosUsuario = new Claim[]
             {
                 new Claim("username", usuario.UserName),
@@ -20,19 +22,24 @@ namespace UsuariosApi.Services
 
             //Gerar a chave para criptografar o token
             var chave = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c")
+                Encoding.UTF8.GetBytes("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9")
                 );
 
+            //criar credenciais
             var credenciais = new SigningCredentials(chave, SecurityAlgorithms.HmacSha256);
 
+
+            //gerar token
             var token = new JwtSecurityToken(
                     claims: direitosUsuario,
                     signingCredentials: credenciais,
                     expires: DateTime.UtcNow.AddHours(1)
                 );
 
+            //transformamos o nosso token em string
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
+            //retornamos o Token
             return new Token(tokenString);
         }
     }
