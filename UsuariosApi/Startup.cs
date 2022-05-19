@@ -50,6 +50,7 @@ namespace UsuariosApi
             //Injeção da service
             services.AddScoped<CadastroService, CadastroService>();
             services.AddScoped<TokenService, TokenService>();
+            services.AddScoped<LogoutService, LogoutService>();
 
             //Login
             services.AddScoped<LoginService, LoginService>();
