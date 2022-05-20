@@ -32,7 +32,11 @@ namespace UsuariosApi.Services
 
             if (resultadoIdentity.Result.Succeeded)
             {
-                return Result.Ok();
+                //precisamos disponibilizar um codigo para essa conta ser ativada
+                var codeAtivation =  _userManager.GenerateEmailConfirmationTokenAsync(usuarioIdentity).Result;
+
+
+                return Result.Ok().WithSuccess(codeAtivation).WithSuccess(codeAtivation);
             }
 
             return Result.Fail("Falha ao cadastrar usuário");
