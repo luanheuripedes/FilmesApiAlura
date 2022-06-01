@@ -41,9 +41,9 @@ namespace UsuariosApi.Services
                     //TODO auth de email
                     cliente.Send(mensagemDeEmail);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    throw;
+                    throw new Exception(e.Message);
                 }
                 finally
                 {
