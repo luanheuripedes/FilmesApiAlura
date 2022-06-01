@@ -1,4 +1,5 @@
 ﻿using MailKit.Net.Smtp;
+using Microsoft.Extensions.Configuration;
 using MimeKit;
 using System;
 using UsuariosApi.Models;
@@ -7,6 +8,13 @@ namespace UsuariosApi.Services
 {
     public class EmailService
     {
+        private IConfiguration _configuration;
+
+        public EmailService(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         public void EnviarEmail(string[] destinatario, string assunto, int usuarioId, string codeAtivation)
         {
             Mensagem mensagem = new(destinatario, assunto, usuarioId, codeAtivation);
@@ -22,7 +30,14 @@ namespace UsuariosApi.Services
             {
                 try
                 {
-                    cliente.Connect("Conexao a fazer");
+                    cliente.Connect(_configuration.GetValue<string>("EmailSettings:SmtpServer"),
+                        _configuration.GetValue<int>("EmailSettings:Port"),
+                        true);
+                    cliente.AuthenticationMechanisms.Remove("XOUATH2");
+
+                    cliente.Authenticate(_configuration.GetValue<string>("EmailSettings:From"),
+                                            _configuration.GetValue<string>("EmailSettings:Password"));
+
                     //TODO auth de email
                     cliente.Send(mensagemDeEmail);
                 }
@@ -41,7 +56,7 @@ namespace UsuariosApi.Services
         private MimeMessage CriaCorpoDoEmail(Mensagem mensagem)
         {
             var mensagemDeEmail = new MimeMessage();
-            mensagemDeEmail.From.Add(new MailboxAddress("ADICIONAR O REMETENTE"));
+            mensagemDeEmail.From.Add(new MailboxAddress(_configuration.GetValue<string>("EmailSettings:From")));
             mensagemDeEmail.To.AddRange(mensagem.Destinatario);
             mensagemDeEmail.Subject = mensagem.Assunto;
             mensagemDeEmail.Body = new TextPart(MimeKit.Text.TextFormat.Text)

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using UsuariosApi.Data;
 using UsuariosApi.Data.Dtos;
 using UsuariosApi.Data.Request;
@@ -39,10 +40,12 @@ namespace UsuariosApi.Services
                 //precisamos disponibilizar um codigo para essa conta ser ativada
                 var codeAtivation =  _userManager.GenerateEmailConfirmationTokenAsync(usuarioIdentity).Result;
 
+                var encodedCode = HttpUtility.UrlEncode(codeAtivation);
+
                 _emailService.EnviarEmail(new[] {usuarioIdentity.Email},
                                                     "Link de Ativação",
                                                     usuarioIdentity.Id,
-                                                    codeAtivation);
+                                                    encodedCode);
 
                 return Result.Ok().WithSuccess(codeAtivation);
             }

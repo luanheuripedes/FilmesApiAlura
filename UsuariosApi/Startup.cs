@@ -54,6 +54,7 @@ namespace UsuariosApi
             services.AddScoped<CadastroService, CadastroService>();
             services.AddScoped<TokenService, TokenService>();
             services.AddScoped<LogoutService, LogoutService>();
+            services.AddScoped<EmailService, EmailService>();
 
             //Login
             services.AddScoped<LoginService, LoginService>();
