@@ -16,12 +16,14 @@ namespace UsuariosApi.Services
         private readonly IMapper _mapper;
         private readonly UserManager<IdentityUser<int>> _userManager;
         private readonly UserDbContext _userDbContext;
+        private readonly EmailService _emailService;
 
-        public CadastroService(IMapper mapper, UserManager<IdentityUser<int>> userManager, UserDbContext userDbContext)
+        public CadastroService(IMapper mapper, UserManager<IdentityUser<int>> userManager, UserDbContext userDbContext, EmailService emailService)
         {
             _mapper = mapper;
             _userManager = userManager;
             _userDbContext = userDbContext;
+            _emailService = emailService;
         }
 
         public Result CadastraUsuario(CreateUsuarioDto createDto)
@@ -36,6 +38,11 @@ namespace UsuariosApi.Services
             {
                 //precisamos disponibilizar um codigo para essa conta ser ativada
                 var codeAtivation =  _userManager.GenerateEmailConfirmationTokenAsync(usuarioIdentity).Result;
+
+                _emailService.EnviarEmail(new[] {usuarioIdentity.Email},
+                                                    "Link de Ativação",
+                                                    usuarioIdentity.Id,
+                                                    codeAtivation);
 
                 return Result.Ok().WithSuccess(codeAtivation);
             }
