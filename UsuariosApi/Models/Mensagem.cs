@@ -6,8 +6,6 @@ namespace UsuariosApi.Models
 {
     public class Mensagem
     {
-        
-
         public List<MailboxAddress> Destinatario { get; set; }
         public string Assunto { get; set; }
         public string Conteudo { get; set; }
