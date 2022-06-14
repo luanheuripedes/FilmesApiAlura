@@ -18,24 +18,31 @@ namespace UsuariosApi.Services
         private readonly UserManager<IdentityUser<int>> _userManager;
         private readonly UserDbContext _userDbContext;
         private readonly EmailService _emailService;
+        private readonly RoleManager<IdentityRole<int>> _roleManager;
 
-        public CadastroService(IMapper mapper, UserManager<IdentityUser<int>> userManager, UserDbContext userDbContext, EmailService emailService)
+        public CadastroService(IMapper mapper, UserManager<IdentityUser<int>> userManager, UserDbContext userDbContext, EmailService emailService, RoleManager<IdentityRole<int>> roleManager)
         {
             _mapper = mapper;
             _userManager = userManager;
             _userDbContext = userDbContext;
             _emailService = emailService;
+            _roleManager = roleManager;
         }
 
-        public Result CadastraUsuario(CreateUsuarioDto createDto)
+        public  Result CadastraUsuario(CreateUsuarioDto createDto)
         {
             var usuario = _mapper.Map<Usuario>(createDto);
 
             IdentityUser<int> usuarioIdentity = _mapper.Map<IdentityUser<int>>(usuario);
 
-            Task<IdentityResult> resultadoIdentity = _userManager.CreateAsync(usuarioIdentity, createDto.Password);
+            var resultadoIdentity = _userManager.CreateAsync(usuarioIdentity, createDto.Password).Result;
 
-            if (resultadoIdentity.Result.Succeeded)
+            var createRoleResult =  _roleManager.CreateAsync(new IdentityRole<int>("admin")).Result;
+
+            var usuarioRoleResult =  _userManager.AddToRoleAsync(usuarioIdentity, "admin").Result;
+
+
+            if (resultadoIdentity.Succeeded)
             {
                 //precisamos disponibilizar um codigo para essa conta ser ativada
                 var codeAtivation =  _userManager.GenerateEmailConfirmationTokenAsync(usuarioIdentity).Result;

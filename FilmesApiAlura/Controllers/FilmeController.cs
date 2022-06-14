@@ -3,6 +3,7 @@ using FilmesApiAlura.Data;
 using FilmesApiAlura.Data.Dtos;
 using FilmesApiAlura.Models;
 using FilmesApiAlura.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace FilmesApiAlura.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public IActionResult AdicionaFilme([FromBody] CreateFilmeDto filmeDto)
         {
             var readDto = _filmeService.AdicionaService(filmeDto);
