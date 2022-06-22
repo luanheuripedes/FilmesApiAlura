@@ -11,6 +11,7 @@ namespace UsuariosApi.Profiles
         {
             CreateMap<CreateUsuarioDto, Usuario>().ReverseMap();
             CreateMap<Usuario, IdentityUser<int>>().ReverseMap();
+            CreateMap<Usuario, CustomIdentityUser>().ReverseMap();
         }
     }
 }
