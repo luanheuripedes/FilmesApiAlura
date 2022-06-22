@@ -1,6 +1,8 @@
+using FilmesApiAlura.Authorization;
 using FilmesApiAlura.Data;
 using FilmesApiAlura.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -50,6 +52,16 @@ namespace FilmesApiAlura
                     ClockSkew = TimeSpan.Zero
                  };
             });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("IdadeMinima", policy =>
+                {
+                    policy.Requirements.Add(new IdadeMinimaRequirement(18));
+                });
+            });
+
+            services.AddSingleton<IAuthorizationHandler, IdadeMinimaHandler>();
 
             services.AddScoped<FilmeService, FilmeService>();
             services.AddScoped<CinemaService, CinemaService>();

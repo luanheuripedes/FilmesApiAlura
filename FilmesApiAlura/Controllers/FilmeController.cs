@@ -27,14 +27,12 @@ namespace FilmesApiAlura.Controllers
         public IActionResult AdicionaFilme([FromBody] CreateFilmeDto filmeDto)
         {
             var readDto = _filmeService.AdicionaService(filmeDto);
-            
-
             return CreatedAtAction(nameof(RecuperaFilmesPorId), new { Id = readDto.Id}, readDto);
             
         }
 
         [HttpGet]
-        [Authorize(Roles = "admin, regular")]
+        [Authorize(Roles = "admin, regular",Policy = "IdadeMinima")]
         public IActionResult RecuperaFilmes([FromQuery] int? classificacaoEtaria = null)
         {
             var readdto = _filmeService.RecuperaFilmes(classificacaoEtaria);
