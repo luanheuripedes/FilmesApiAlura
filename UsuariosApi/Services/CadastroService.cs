@@ -37,7 +37,7 @@ namespace UsuariosApi.Services
 
             var resultadoIdentity = _userManager.CreateAsync(usuarioIdentity, createDto.Password).Result;
 
-            
+            _userManager.AddToRoleAsync(usuarioIdentity, "regular");
 
 
             if (resultadoIdentity.Succeeded)
